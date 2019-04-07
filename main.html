@@ -1,0 +1,75 @@
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="styles/vs.css">
+<script src="scripts/highlight.min.js"></script>
+<link rel="stylesheet" type="text/css" href="styles/main.css">
+<script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="scripts/control_functions.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+</head>
+<title>User Study</title>
+
+
+
+
+
+</head>
+
+<body>
+	<div id=toolbar class="row">
+		<div class="column">
+			<div id="file_loader_exporter" class="column"><input type="file" id="file_upload" name="file" />
+				<input type="text" id=file_export_name placeholder="filename"/>
+				<button type="button" id="file_export">Export</button>
+			</div>
+		</div>
+	</div> 
+	
+	<div id=viewer_controls class="row">
+		<div id=control_left class="column control"><button id="turn_left_button" type="button">Prev Problem (Left arrow key)</button></div>
+		<div id=control_center class="column control"></div>
+		<div id=control_right class="column control"><button id="turn_right_button" type="button">Next Problem (Right arrow key)</button></div>
+	</div> 
+	
+	<div id=viewer class="row">
+		<div id=page_problem class="column page">
+			<div id=page_problem_work class="row work">Work will go here</div>
+			<div id=page_problem_output class="row output">Output will go here</div>
+		</div>
+		<div id=page_suggestion class="column page">Suggestion goes here</div>
+		<div id=page_controls class="column page">
+			<div id=suggestion_controls class="row">
+				<div id=suggestion_control_left class="column control"><button id="suggestion_turn_left_button" type="button">Prev Suggestion</button></div>
+				<div id=suggestion_control_center class="column control"></div>
+				<div id=suggestion_control_right class="column control"><button id="suggestion_turn_right_button" type="button">Next Suggestion</button></div>
+			</div>
+			<div id="recognize_select_div" class="row"><input type=checkbox id="recognize_checkbox">Able to recognize problem</input></div>
+			<div id="helpful_select_div" class="row"><input type=checkbox id="helpful_checkbox"></input>Suggestion was helpful in recognizing problem</div>
+			<div id="suggest_select_div" class="row"><input type=checkbox id="suggest_checkbox"></input>You would suggest this as a fix to the problem</div>
+			<div id="rating_select_div" class="row">Rate the suggestion out of 5: 
+				<select id=rating_select>
+					<option value="null" selected="selected">no rating</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select>
+			</div>
+			<div class="row">
+				<p id=comment>
+				
+				</p>
+			</div>
+			<div class="row">
+				<textarea id=comment_input placeholder="Write any comments/suggestions here"></textarea>
+				<div>
+					<button id="comment_button" type="button">Add comment</button>
+					<button id="comment_remove_button" type="button">Remove comment</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
