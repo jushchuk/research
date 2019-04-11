@@ -2,6 +2,8 @@ var problems = null;
 var currentProblem = 0;
 var currentSuggestion = 0;
 
+var startTime = null;
+
 $(document).ready(function(){
 	setup()
 });
@@ -24,6 +26,54 @@ function setup(){
 				turn('right','problem');
 				break;
 				
+				case 65: // a
+				toggleCheckbox("recognize",true);
+				break;
+				
+				case 83: // s
+				toggleCheckbox("helpful",true);
+				break;
+				
+				case 89: // y
+				toggleCheckbox("suggest",true);
+				break;
+				
+				case 73: // i
+				toggleCheckbox("want",true);
+				break;
+				
+				case 219: // [
+				turn("left", "suggestion");
+				break;
+				
+				case 221: // ]
+				turn("right", "suggestion");
+				break;
+				
+				case 48: // 0 
+				updateRating("null");
+				break;
+				
+				case 49: // 1
+				updateRating("1");
+				break;
+				
+				case 50: // 2
+				updateRating("2");
+				break;
+				
+				case 51: // 3
+				updateRating("3");
+				break;
+				
+				case 52: // 4
+				updateRating("4");
+				break;
+				
+				case 53: // 5
+				updateRating("5");
+				break;
+				
 				default: return; // exit this handler for other keys
 			}
 			e.preventDefault(); // prevent the default action (scroll / move caret)
@@ -43,6 +93,7 @@ function parseProblems(){
 		//console.log(file);
 		const reader = new FileReader()
 		reader.onload = function(event) {
+			startTime = Date.now()
 			problems = JSON.parse(reader.result);
 			console.log(problems);
 			
@@ -92,17 +143,20 @@ function initilizeControls(){
 	
 	//Suggestion checkbox controls
 	$('#recognize_checkbox').on('click', function(){
-		toggleCheckbox('recognize');
+		toggleCheckbox('recognize',false);
 	});
 	
 	$('#helpful_checkbox').on('click', function(){
-		toggleCheckbox('helpful');
+		toggleCheckbox('helpful',false);
 	});
 	
 	$('#suggest_checkbox').on('click', function(){
-		toggleCheckbox('suggest');
+		toggleCheckbox('suggest',false);
 	});
 	
+	$('#want_checkbox').on('click', function(){
+		toggleCheckbox('want',false);
+	});
 	
 	//Suggestion rating controls
 	$('#rating_select').on('change', function(){
@@ -118,14 +172,6 @@ function initilizeControls(){
 	$('#comment_remove_button').on('click', function(){
 		removeComment();
 	});
-	
-	/*
-	$('#comment_input').on('keydown', function(e){
-		if (e.which == 13){
-			createComment();
-		}
-	});
-	*/
 }
 
 function populateView(){
@@ -153,7 +199,7 @@ function populateProblem(){
 	$('#page_problem_work').html(work);
 	$('#page_problem_output').html(output);
 	
-	$('#control_center').text('Current Problem: ' + currentProblem);
+	$('#control_center').text('Current Problem: ' + (currentProblem + 1) + ' out of ' + problems['problems'].length);
 }
 
 function populateSuggestion(){
@@ -162,8 +208,8 @@ function populateSuggestion(){
 	var s = suggestion['suggestion'];
 	//console.log(suggestion);
 	if(suggestion['level'] != 0 && Array.isArray(s) && s.length == 2){
-		var before = '<div class="row work"><pre><code class="work_text">'+s[0]+'</code></pre></div>';
-		var after  = '<div class="row output"><pre><code class="output_text">'+s[1] +'</code></pre></div>';
+		var before = '<div class="row">Before Fix:</div><div class="row work"><pre><code class="work_text">'+s[1]+'</code></pre></div>';
+		var after  = '<div class="row">After Fix:</div><div class="row output"><pre><code class="output_text">'+s[0] +'</code></pre></div>';
 		$('#page_suggestion').html(before+after);
 	} else {
 		$('#page_suggestion').html('<div>'+suggestion['suggestion']+'</div>');
@@ -171,11 +217,13 @@ function populateSuggestion(){
 }
 
 function populateSuggestionControls(){
-	$('#suggestion_control_center').text('Current Suggestion: ' + currentSuggestion);
+	$('#suggestion_control_center').text('Current Suggestion: ' + (currentSuggestion + 1));
 	
 	populateCheckbox('recognize');
 	populateCheckbox('helpful'); 
 	populateCheckbox('suggest');
+	populateCheckbox('want');
+	
 	populateRating()
 	populateComment();
 }

@@ -12,6 +12,13 @@ function exportFile(){
 		if (!new_filename.endsWith('.json')){
 			new_filename += '.json';
 		}
+		
+		var endTime = Date.now()
+		
+		var duration = (endTime - startTime) / 1000;
+		
+		problems['duration'] = duration;
+		
 		download(JSON.stringify(problems), new_filename, 'text/json');
 	}
 }
@@ -67,21 +74,32 @@ function updatePosition(position, type){
 
 //Suggestion Checkboxes Control Functions
 //need to verify
-function toggleCheckbox(type){
-	var valid_types = ["recognize","helpful","suggest"];
-	
-	if(problems != null && valid_types.indexOf(type)!=-1){
-		//console.log(type+': '+$('#'+type+'_checkbox').prop('checked'));
+function toggleCheckbox(type, toggle){
+	var valid_types = ["recognize","helpful","suggest",,"want"];
+	if(problems != null && valid_types.indexOf(type) != -1){
+		//console.log(currentProblem+"."+currentSuggestion+': '+$('#'+type+'_checkbox').prop('checked'));
 		var value = $('#'+type+'_checkbox').prop('checked');
+		if(toggle){
+			value = !value;
+			$('#'+type+'_checkbox').prop('checked',value);
+		}
 		problems['problems'][currentProblem]['suggestions'][currentSuggestion]['feedback'][type] = value;
+		if(type == "recognize"){
+			for(var i=0; i<3; i++){
+				problems['problems'][currentProblem]['suggestions'][i]['feedback'][type] = value;
+			}
+		}
+		console.log(problems['problems'][currentProblem]['suggestions'][currentSuggestion]['feedback'][type]);
+		//populateCheckbox(type);
 	}
 }
 
 function populateCheckbox(type){
-	var valid_types = ["recognize","helpful","suggest"];
+	var valid_types = ["recognize","helpful","suggest","want"];
 	
-	if(problems != null && valid_types.indexOf(type)!=-1){
-		//console.log(type+': '+$('#'+type+'_checkbox').prop('checked'));
+	if(problems != null && valid_types.indexOf(type) != -1){
+		$('#'+type+'_checkbox').prop('checked', false);
+		//console.log("Populating:"+currentProblem+"."+currentSuggestion+': '+$('#'+type+'_checkbox').prop('checked'));
 		var value = problems['problems'][currentProblem]['suggestions'][currentSuggestion]['feedback'][type];
 		$('#'+type+'_checkbox').prop('checked', value);
 		//console.log(type+': '+$('#'+type+'_checkbox').prop('checked'));
@@ -130,8 +148,10 @@ function createComment(){
 	var comment = $.trim($('#comment_input').val());
 	if (comment != ''){
 		if (problems != null){
-			var feedback = problems['problems'][currentProblem]['suggestions'][currentSuggestion]['feedback'];
-			feedback['comment'] = comment;
+			for(var i=0; i<3; i++){
+				var feedback = problems['problems'][currentProblem]['suggestions'][i]['feedback'];
+				feedback['comment'] = comment;
+			}
 			//console.log(feedback['comment']);
 			populateComment();
 		}
@@ -141,8 +161,10 @@ function createComment(){
 
 function removeComment(){
 	if (problems != null){
-		var feedback = problems['problems'][currentProblem]['suggestions'][currentSuggestion]['feedback'];
-		feedback['comment'] = null;
+		for(var i=0; i<3; i++){
+			var feedback = problems['problems'][currentProblem]['suggestions'][i]['feedback'];
+			feedback['comment'] = null;
+		}
 		//console.log(feedback['comment']);
 		populateComment();
 	}
