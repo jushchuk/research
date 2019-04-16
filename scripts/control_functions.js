@@ -196,12 +196,14 @@ function createComment(comment_name){
 	if (comment != ''){
 		if (problems != null){
 			if(comment_name == ''){
-				
+				/*
 				for(var i=0; i<3; i++){
 					var feedback = problems['problems'][currentProblem]['suggestions'][i]['feedback'];
 					feedback['comment'] = comment;
 				}
-				//console.log(feedback['comment']);
+				*/
+				var feedback = problems['problems'][currentProblem]['suggestions'][currentSuggestion]['feedback'];
+				feedback['comment'] = comment;
 			} else {
 				problems['survey']['end']['comment'] = comment;
 			}
@@ -214,10 +216,14 @@ function createComment(comment_name){
 function removeComment(comment_name){
 	if (problems != null){
 		if(comment_name == ''){
+			/*
 			for(var i=0; i<3; i++){
 				var feedback = problems['problems'][currentProblem]['suggestions'][i]['feedback'];
 				feedback['comment'] = null;
 			}
+			*/
+			var feedback = problems['problems'][currentProblem]['suggestions'][currentSuggestion]['feedback'];
+			feedback['comment'] = null;
 			//console.log(feedback['comment']);
 		} else {
 			problems['survey']['end']['comment'] = null;

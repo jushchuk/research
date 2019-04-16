@@ -36,7 +36,7 @@ function setup(){
 				break;
 				
 				case 68: // d
-				toggleCheckbox("encounter",true);
+				//toggleCheckbox("encounter",true);
 				break;
 				
 				case 65: // a
@@ -44,15 +44,15 @@ function setup(){
 				break;
 				
 				case 83: // s
-				toggleCheckbox("helpful",true);
+				//toggleCheckbox("helpful",true);
 				break;
 				
 				case 89: // y
-				toggleCheckbox("suggest",true);
+				//toggleCheckbox("suggest",true);
 				break;
 				
 				case 73: // i
-				toggleCheckbox("want",true);
+				//toggleCheckbox("want",true);
 				break;
 				
 				case 219: // [
@@ -341,15 +341,15 @@ function showOuter(new_state){
 		} else {
 			$('#outer_start').html('<div class="column"><p>Please upload survey JSON file to get started.</p></div>');
 		}
-		$('#question_matrix_description').html('The following questions ask you to take on the perspective of different user types.');
+		$('#question_matrix_description').html('<span>The following questions ask you to take on the perspective of different user types. <strong>Fill out all rows, even if you do not fit that user type. In that case, consider what you would like if you were that user type.</strong></span>');
 		$('#personal_questions').show();
 		$('#overall_comment_div').hide();
 		$('#control_span').html('Proceed to next part of survey: ');
 		$('#turn_button').html('Next');
 		$('#finish_div').hide();
 	} else if(state == 'end'){
-		$('#outer_start').html('<div class="column"><p>Exit survey questions. This is the last part of the survey. Please export your survey once complete.</p></div>');
-		$('#question_matrix_description').html('Considering your experience with this survey and identifying problems, please once again relect on the perspective of different user types.');
+		$('#outer_start').html('<div class="column"><p>Exit survey questions. This is the last part of the survey. <strong>Please export your survey once complete.</strong></p></div>');
+		$('#question_matrix_description').html('<span>Considering your experience with this survey and identifying problems, please once again relect on the perspective of different user types. <strong>Once again, fill out each row considering what you would like if you were that user type.</strong></span>');
 		$('#personal_questions').hide();
 		$('#overall_comment_div').show();
 		$('#control_span').html('Go to previous part of survey: ');

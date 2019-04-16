@@ -1,0 +1,484 @@
+{
+  "problems": [
+    {
+      "userWork": "@app.route('/students/<sid>')\ndef student(sid):\n    \"\"\"Return students info and classes\"\"\"\n    with connect(dbName) as db:\n        \n        # run the sql query to get all the students\n        cursor = db.execute('''select s.lname, s.fname, s.sid, e.cid \n        from student s, enrolled_in e\n        where s.sid=e.cid\n        order by sid''')\n        # reformat the data\n        result = [ { \"lastName\": lname, \"firstName\": fname, \"id\": makeURL('students', sid),\n                   \"classes\": makeURL('classes', cid)}\n                   for sid, lname, fname in cursor ]\n        # Bottle is going to magically convert this dictionary to JSON\n        return { 'students': result }\n\ncheck('Q1. Student info', getJson('students', 1), points=5)",
+      "userOutput": "\n\nOutputs:\nTraceback (most recent call last):\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 997, in _handle\n    out = route.call(**args)\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 2000, in wrapper\n    rv = callback(*a, **ka)\n  File \"<ipython-input-3-1bfadb5a5830>\", line 4, in student\n    with connect(dbName) as db:\nNameError: name 'connect' is not defined\n",
+      "suggestions": [
+        {
+          "level": 0,
+          "suggestion": "There is a NameError, indicating an undeclared variable has been referenced. Check for typos and scope issues. Or rerun prior cells in the notebook.",
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 1,
+          "suggestion": [
+            "                return final_result",
+            "        return finl_result"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 2,
+          "suggestion": [
+            "                return final_result",
+            "        return finl_result"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        }
+      ]
+    },
+    {
+      "userWork": "@app.route('/students/<sid>')\ndef student(sid):\n    \"\"\"Return students info and classes\"\"\"\n    with connect(dbName) as db:\n        \n        # run the sql query to get all the students\n        cursor = db.execute('''select s.lname, s.fname, s.sid, e.cid \n        from student s, enrolled_in e\n        where s.sid=e.cid\n        order by sid''')\n        # reformat the data\n        result = [ { \"lastName\": lname, \"firstName\": fname, \"id\": makeURL('students', sid),\n                   \"classes\": makeURL('classes', cid)}\n                   for sid, lname, fname in cursor ]\n        # Bottle is going to magically convert this dictionary to JSON\n        return { 'students': result }\n\ncheck('Q1. Student info', getJson('students', 1), points=5)",
+      "userOutput": "\n\nOutputs:\nTraceback (most recent call last):\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 997, in _handle\n    out = route.call(**args)\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 2000, in wrapper\n    rv = callback(*a, **ka)\n  File \"<ipython-input-9-1bfadb5a5830>\", line 10, in student\n    order by sid''')\nsqlite3.OperationalError: ambiguous column name: sid\n",
+      "suggestions": [
+        {
+          "level": 0,
+          "suggestion": "In SQL, where there are two or more tables that share the same column name, there must be a way to disambiguate between the tables a column is associated with. This can be solved using aliases for the tables.",
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 1,
+          "suggestion": [
+            "                cursor = db.execute('''select c.mid, c.bid from members m, checked_out c where m.mid=c.mid and m.mid=?''',[mid])",
+            "        cursor = db.execute('''select mid, c.bid from members m, checked_out c where m.mid=c.mid and m.mid=?''',[mid])"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 2,
+          "suggestion": [
+            "                cursor = db.execute('''select e.sid, e.cid from student s, enrolled_in e where s.sid=e.sid and s.sid=?''',[sid])",
+            "        cursor = db.execute('''select sid, e.cid from student s, enrolled_in e where s.sid=e.sid and s.sid=?''',[sid])"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        }
+      ]
+    },
+    {
+      "userWork": "@app.route('/students/<sid>')\ndef student(sid):\n    \"\"\"Return students info and classes\"\"\"\n    with connect(dbName) as db:\n        \n        # run the sql query to get all the students\n        cursor = db.execute('''select s.lname, s.fname, s.sid, e.cid \n        from student s, enrolled_in e\n        where s.sid=e.cid\n        order by s.sid''')\n        # reformat the data\n        result = [ { \"lastName\": lname, \"firstName\": fname, \"id\": makeURL('students', s.sid),\n                   \"classes\": makeURL('classes', cid)}\n                   for sid, lname, fname in cursor ]\n        # Bottle is going to magically convert this dictionary to JSON\n        if result==[]:\n                return bottle.HTTPResponse(status=404)\n        return { 'students': result }\n\ncheck('Q1. Student info', getJson('students', 1), points=5)",
+      "userOutput": "\n\nOutputs:\nTraceback (most recent call last):\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 997, in _handle\n    out = route.call(**args)\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 2000, in wrapper\n    rv = callback(*a, **ka)\n  File \"<ipython-input-14-641844a5f9c6>\", line 14, in student\n    for sid, lname, fname in cursor ]\n  File \"<ipython-input-14-641844a5f9c6>\", line 14, in <listcomp>\n    for sid, lname, fname in cursor ]\nValueError: too many values to unpack (expected 3)\n",
+      "suggestions": [
+        {
+          "level": 0,
+          "suggestion": "Python can automatically unpack a tuple or list and assign the values inside to different variables. However, the number of variable to 'unpack' must be consistent to prevent ambiguity. In this example, make sure the SQL query returns the number of columns that are the same number of variable that are unpacked in list comprehension.",
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 1,
+          "suggestion": [
+            "        final_result = [{\"id\":makeURL('students',mid),\"lastName\":last_name,\"firstName\":first_name,\"books\":books_list} for mid, last_name, first_name in member_result][0]",
+            "        final_result = [{\"id\":makeURL('students',mid),\"lastName\":last_name,\"books\":books_list} for mid, last_name in member_result][0]"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 2,
+          "suggestion": [
+            "        final_result = [{\"id\":makeURL('students',sid),\"lastName\":lname,\"firstName\":fname,\"classes\":class_list} for sid, lname, fname in student_result][0]",
+            "        final_result = [{\"id\":makeURL('students',sid),\"lastName\":lname,\"classes\":class_list} for sid,  name 'lname' is not definedin student_result][0]"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        }
+      ]
+    },
+    {
+      "userWork": "@app.route('/students/<sid>')\ndef student(sid):\n    \"\"\"Return students info and classes\"\"\"\n    with connect(dbName) as db:\n        \n        # run the sql query to get all the students\n        cursor = db.execute('''select s.lname, s.fname, s.sid, e.cid \n        from student s, enrolled_in e\n        where s.sid=e.cid\n        order by s.sid''')\n        # reformat the data\n        result = [ { \"lastName\": lname, \"firstName\": fname, \"id\": makeURL('students', sid),\n                   \"classes\": makeURL('classes', cid)}\n                   for lname, fname, sid, cid in cursor ]\n        # Bottle is going to magically convert this dictionary to JSON\n        if result==[]:\n                return bottle.HTTPResponse(status=404)\n        return { 'students': result }\n\ncheck('Q1. Student info', getJson('students', 1), points=5)",
+      "userOutput": "\n\nOutputs:\nhttp response = 200\n{'students': [{'lastName': 'Carter',\n   'firstName': 'Ashwin',\n   'id': '/students/0',\n   'classes': '/classes/0'},\n  {'lastName': 'Carter',\n   'firstName': 'Ashwin',\n   'id': '/students/0',\n   'classes': '/classes/0'},\n  {'lastName': 'Carter',\n   'firstName': 'Ashwin',\n   'id': '/students/0',\n   'classes': '/classes/0'},\n  {'lastName': 'Carter',\n   'firstName': 'Ashwin',\n   'id': '/students/0',\n   'classes': '/classes/0'},\n  {'lastName': 'Carter',\n   'firstName': 'Ashwin',\n   'id': '/students/0',\n   'classes': '/classes/0'},\n  {'lastName': 'Carter',\n   'firstName': 'Ashwin',\n   'id': '/students/0',\n   'classes': '/classes/0'},\n  {'lastName': 'Carter',\n   'firstName': 'Ashwin',\n   'id': '/students/0',\n   'classes': '/classes/0'},\n  {'lastName': 'Carter',\n   'firstName': 'Ashwin',\n   'id': '/students/0',\n   'classes': '/classes/0'},\n  ...]}\nQ1. Student info incorrect\n  expected {'lastName': 'Velasquez', 'firstName': 'Alexandros', 'id': '/students/1', 'classes': ['/classes/1', '/classes/3', '/classes/25']}\n",
+      "suggestions": [
+        {
+          "level": 0,
+          "suggestion": "The result has incorrect values which appear to be reapting. The same item could be added multiple times in a loop, or the SQL query may be incorrect. There is no syntax error but check that the logic in the SQL query is correct.",
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 1,
+          "suggestion": [
+            "        cursor = db.execute('''select c.mid, c.bid from members m, checked_out c where m.mid=c.mid and m.mid=?''',[mid])",
+            "        cursor = db.execute('''select c.mid, c.bid from members m, checked_out c where m.mid=c.bid and m.mid=?''',[mid])"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 2,
+          "suggestion": [
+            "        cursor = db.execute('''select e.sid, e.cid from student s, enrolled_in e where s.sid=e.sid and s.sid=?''',[sid])",
+            "        cursor = db.execute('''select e.sid, e.cid from student s, enrolled_in e where s.sid=e.cid and s.sid=?''',[sid])"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        }
+      ]
+    },
+    {
+      "userWork": "@app.route('/students/<sid>')\ndef student(sid):\n    \"\"\"Return students info and classes\"\"\"\n    with connect(dbName) as db:\n        \n        # run the sql query to get all the students\n        cursor = db.execute('''select s.lname, s.fname, s.sid, e.cid as cid0, e1.cid as cid1, e2.cid as cid2\n        from student s, enrolled_in e, enrolled_in e1, enrolled_in e2\n        where s.sid=e.sid and s.sid = ?\n        order by s.sid''', [sid])\n        # reformat the data\n        row = cursor.fetchone()\n        result = [ { \"lastName\": row['lname'], \"firstName\": row['fname'], \"id\": makeURL('students', sid),\n                   \"classes\": [makeURL('classes', row['cid0']), makeURL('classes', row['cid1']), makeURL('classes', row['cid2'])]\n                    }]\n        # Bottle is going to magically convert this dictionary to JSON\n        if result==[]:\n                return bottle.HTTPResponse(status=404)\n        return { 'students': result }\n\ncheck('Q1. Student info', getJson('students', 1), points=5)",
+      "userOutput": "\n\nOutputs:\nhttp response = 200\n{'students': [{'lastName': 'Velasquez',\n   'firstName': 'Alexandros',\n   'id': '/students/1',\n   'classes': ['/classes/1', '/classes/18', '/classes/18']}]}\nQ1. Student info incorrect\n  expected {'lastName': 'Velasquez', 'firstName': 'Alexandros', 'id': '/students/1', 'classes': ['/classes/1', '/classes/3', '/classes/25']}\n",
+      "suggestions": [
+        {
+          "level": 0,
+          "suggestion": "The returned object is correctly a dictionary, but the values in the dictionary are incorrect.",
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 1,
+          "suggestion": [
+            "                return final_result",
+            "        return { 'members': final_result }"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 2,
+          "suggestion": [
+            "                return final_result",
+            "        return { 'students': final_result }"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        }
+      ]
+    },
+    {
+      "userWork": "@app.route('/students/<sid>')\ndef student(sid):\n    \"\"\"Return students info and classes\"\"\"\n    with connect(dbName) as db:\n        \n        # run the sql query to get all the students\n        cursor = db.execute('''select s.lname, s.fname\n        from student \n        where s.sid= ?''', [sid])\n        cursor2 = db.execute('''select cid\n        from courses\n        where sid= ?''', [sid])\n        studentrow = cursor.fetchone\n        # reformat the data\n        \n        result = [ {\"lastName\": studentrow['lname'], \"firstName\": row['fname'], \"id\": makeURL('students', sid),\n                   \"classes\": [makeURL('classes', cid) for cid in cursor2]}\n                ]\n        # Bottle is going to magically convert this dictionary to JSON\n        if result==[]:\n                return bottle.HTTPResponse(status=404)\n        return { 'students': result }\n\ncheck('Q1. Student info', getJson('students', 1), points=5)",
+      "userOutput": "\n\nOutputs:\nTraceback (most recent call last):\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 997, in _handle\n    out = route.call(**args)\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 2000, in wrapper\n    rv = callback(*a, **ka)\n  File \"<ipython-input-43-45e9099e05db>\", line 9, in student\n    where s.sid= ?''', [sid])\nsqlite3.OperationalError: no such column: s.lname\n",
+      "suggestions": [
+        {
+          "level": 0,
+          "suggestion": "Make sure the alias of the SQL tables and column names have no typos. Also check that the table referenced is included in the FROM clause.",
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 1,
+          "suggestion": [
+            "        cursor = db.execute('''select c.mid, c.bid from members m, checked_out c where m.mid=c.mid and m.mid=?''',[mid])",
+            "        cursor = db.execute('''select c.mid, c.bid from members m where m.mid=c.mid and m.mid=?''',[mid])"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 2,
+          "suggestion": [
+            "        cursor = db.execute('''select e.sid, e.cid from student s, enrolled_in e where s.sid=e.sid and s.sid=?''',[sid])",
+            "        cursor = db.execute('''select e.sid, e.cid from student s where s.sid=e.sid and s.sid=?''',[sid])"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        }
+      ]
+    },
+    {
+      "userWork": "@app.route('/students/<sid>')\ndef student(sid):\n    \"\"\"Return students info and classes\"\"\"\n    with connect(dbName) as db:\n        \n        # run the sql query to get all the students\n        cursor = db.execute('''select lname, fname\n        from student \n        where sid= ?''', [sid])\n        cursor2 = db.execute('''select cid\n        from enrolled_in\n        where sid= ?''', [sid])\n        studentrow = cursor.fetchone\n        # reformat the data\n        \n        result = [ {\"lastName\": studentrow['lname'], \"firstName\": row['fname'], \"id\": makeURL('students', sid),\n                   \"classes\": [makeURL('classes', cid) for cid in cursor2]}\n                ]\n        # Bottle is going to magically convert this dictionary to JSON\n        if result==[]:\n                return bottle.HTTPResponse(status=404)\n        return { 'students': result }\n\ncheck('Q1. Student info', getJson('students', 1), points=5)",
+      "userOutput": "\n\nOutputs:\nTraceback (most recent call last):\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 997, in _handle\n    out = route.call(**args)\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 2000, in wrapper\n    rv = callback(*a, **ka)\n  File \"<ipython-input-47-21c50d4f8a8a>\", line 16, in student\n    result = [ {\"lastName\": studentrow['lname'], \"firstName\": row['fname'], \"id\": makeURL('students', sid),\nTypeError: 'builtin_function_or_method' object is not subscriptable\n",
+      "suggestions": [
+        {
+          "level": 0,
+          "suggestion": "When retreiving the rows from the result of a db.execute(), use the fetchone() or fetchall() methods which returns the rows. Don't access it like a list using indices.",
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 1,
+          "suggestion": [
+            "        member_result = cursor.fetchall()",
+            "        member_result = cursor[0]"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 2,
+          "suggestion": [
+            "        student_result = cursor.fetchall()",
+            "        student_result = cursor[0]"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        }
+      ]
+    },
+    {
+      "userWork": "@app.route('/students/<sid>')\ndef student(sid):\n    \"\"\"Return students info and classes\"\"\"\n    with connect(dbName) as db:\n        \n        # run the sql query to get all the students\n        cursor = db.execute('''select lname, fname\n        from student \n        where sid= ?''', [sid])\n        cursor2 = db.execute('''select cid\n        from enrolled_in\n        where sid= ?''', [sid])\n        studentrow = cursor.fetchone()\n        # reformat the data\n        \n        #result = [{\"classes\": [makeURL('classes', cid) for cid in cursor2]}]\n        result = [ {\"lastName\": studentrow['lname'],\n                    \"firstName\": studentrow['fname'], \n                    \"id\": makeURL('students', sid),\n                    \"classes\": [makeURL('classes', row[0]) for row in cursor2.fetchall()]\n                   }]\n        # Bottle is going to magically convert this dictionary to JSON\n        if result==[]:\n                return bottle.HTTPResponse(status=404)\n        return { 'students': result }\n\ncheck('Q1. Student info', getJson('students', 1), points=5)",
+      "userOutput": "\n\nOutputs:\nhttp response = 200\n{'students': [{'lastName': 'Velasquez',\n   'firstName': 'Alexandros',\n   'id': '/students/1',\n   'classes': ['/classes/1', '/classes/3', '/classes/25']}]}\nQ1. Student info incorrect\n  expected {'lastName': 'Velasquez', 'firstName': 'Alexandros', 'id': '/students/1', 'classes': ['/classes/1', '/classes/3', '/classes/25']}\n",
+      "suggestions": [
+        {
+          "level": 0,
+          "suggestion": "The returned object is correctly a dictionary, but the values in the dictionary are incorrect.",
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 1,
+          "suggestion": [
+            "                return final_result",
+            "        return { 'members': final_result }"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 2,
+          "suggestion": [
+            "                return final_result",
+            "        return { 'students': final_result }"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        }
+      ]
+    },
+    {
+      "userWork": "@app.route('/students/<sid>')\ndef student(sid):\n    \"\"\"Return students info and classes\"\"\"\n    with connect(dbName) as db:\n        \n        # run the sql query to get all the students\n        cursor = db.execute('''select lname, fname\n        from student \n        where sid= ?''', [sid])\n        cursor2 = db.execute('''select cid\n        from enrolled_in\n        where sid= ?''', [sid])\n        studentrow = cursor.fetchone()\n        # reformat the data\n        \n        #result = [{\"classes\": [makeURL('classes', cid) for cid in cursor2]}]\n        result =  {\"lastName\": studentrow['lname'],\n                    \"firstName\": studentrow['fname'], \n                    \"id\": makeURL('students', sid),\n                    \"classes\": [makeURL('classes', row[0]) for row in cursor2.fetchall()]\n                   }\n        # Bottle is going to magically convert this dictionary to JSON\n        if result==[]:\n                return bottle.HTTPResponse(status=404)\n        return { result }\n\ncheck('Q1. Student info', getJson('students', 1), points=5)",
+      "userOutput": "\n\nOutputs:\nTraceback (most recent call last):\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 997, in _handle\n    out = route.call(**args)\n  File \"/home/victor/Documents/School/COMP 521/A4/bottle.py\", line 2000, in wrapper\n    rv = callback(*a, **ka)\n  File \"<ipython-input-60-4b52c34a4aec>\", line 25, in student\n    return { result }\nTypeError: unhashable type: 'dict'\n",
+      "suggestions": [
+        {
+          "level": 0,
+          "suggestion": "When retreiving the rows from the result of a db.execute(), use the fetchone() or fetchall() methods which returns the rows. Don't access it like a list using indices.",
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 1,
+          "suggestion": [
+            "        member_result = cursor.fetchall()",
+            "        member_result = cursor[0]"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 2,
+          "suggestion": [
+            "        student_result = cursor.fetchall()",
+            "        student_result = cursor[0]"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        }
+      ]
+    },
+    {
+      "userWork": "@app.route('/students/<sid>')\ndef student(sid):\n    \"\"\"Return students info and classes\"\"\"\n    with connect(dbName) as db:\n        \n        # run the sql query to get all the students\n        cursor = db.execute('''select lname, fname\n        from student \n        where sid= ?''', [sid])\n        cursor2 = db.execute('''select cid\n        from enrolled_in\n        where sid= ?''', [sid])\n        studentrow = cursor.fetchone()\n        # reformat the data\n        \n        #result = [{\"classes\": [makeURL('classes', cid) for cid in cursor2]}]\n        result =  {\"lastName\": studentrow['lname'],\n                    \"firstName\": studentrow['fname'], \n                    \"id\": makeURL('students', sid),\n                    \"classes\": [makeURL('classes', row[0]) for row in cursor2.fetchall()]\n                   }\n        # Bottle is going to magically convert this dictionary to JSON\n        if result:\n                return bottle.HTTPResponse(status=404)\n        return  result \n\ncheck('Q1. Student info', getJson('students', 1), points=5)",
+      "userOutput": "\n\nOutputs:\nhttp response = 404\nQ1. Student info incorrect type\nyour answer type is integer\nexpected type is dictionary\n",
+      "suggestions": [
+        {
+          "level": 0,
+          "suggestion": "A 404 response means the if statement is executing that returns that response when it is not supposed to. Likely the logic is incorrect in the condition of the if statement. The behavior for a integer to cast into a boolean may not be clear. Consider being more explicit.",
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 1,
+          "suggestion": [
+            "                if len(member_result) == 0:",
+            "        if len(member_result):"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        },
+        {
+          "level": 2,
+          "suggestion": [
+            "                if len(student_result) == 0:",
+            "        if len(student_result):"
+          ],
+          "feedback": {
+            "rating": 0,
+            "comment": "",
+            "recognizeProblem": false,
+            "wasHelpful": false,
+            "wouldSuggest": false,
+            "alternative": ""
+          }
+        }
+      ]
+    }
+  ]
+}
