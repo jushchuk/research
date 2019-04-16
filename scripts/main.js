@@ -1,6 +1,7 @@
 var problems = null;
 var currentProblem = 0;
 var currentSuggestion = 0;
+var state = 'start';
 
 var startTime = null;
 
@@ -19,11 +20,19 @@ function setup(){
 		if (!((e.target.nodeName == 'INPUT' && e.target.type == 'text')|| e.target.nodeName == 'TEXTAREA')){
 			switch(e.which) {
 				case 37: // left
-				turn('left','problem');
+				if(state=='middle'){
+					turn('left','problem');					
+				} else if(state=='end' && problems!=null){
+					showInner();
+				}
 				break;
 
 				case 39: // right
-				turn('right','problem');
+				if(state=='middle'){
+					turn('right','problem');
+				} else if(state=='start' && problems!=null){
+					showInner();
+				}
 				break;
 				
 				case 65: // a
@@ -80,6 +89,9 @@ function setup(){
 		}
 	});
 	
+	$('#inner').hide();
+	$('#outer_questions').hide();
+	
 	//used for stylizing code
 	hljs.initHighlightingOnLoad();
 }
@@ -97,12 +109,16 @@ function parseProblems(){
 			problems = JSON.parse(reader.result);
 			console.log(problems);
 			
+			initilizeSurveyObject();
+			
 			initilizeControls();
 			
 			currentProblem = 0;
 			currentSuggestion = 0;
 			
 			populateView();
+			
+			showOuter('start');
 		};
 		reader.readAsText(file);
 		
@@ -111,11 +127,32 @@ function parseProblems(){
 	}
 }
 
+function initilizeSurveyObject(){
+	if(problems != null){
+		if(problems['survey']==null){
+			problems['survey'] = {
+				'start': null,
+				'end': {
+					'comment': null
+				}
+			};
+		}
+	}
+}
+
 function initilizeControls(){
 	//Export File control
 	$('#file_export').on('click', function(){
 		exportFile();
 	});
+	
+	//Outer Survey controls
+	$('#turn_button').on('click', function(){
+		showInner();
+	});
+	
+	
+	
 	
 	//Problem navigation controls
 	$('#turn_left_button').on('click', function(){
@@ -166,12 +203,64 @@ function initilizeControls(){
 	
 	//Comment controls
 	$('#comment_button').on('click', function(){
-		createComment();
+		createComment('');
 	});
 	
 	$('#comment_remove_button').on('click', function(){
-		removeComment();
+		removeComment('');
 	});
+	
+	//Overall Comment controls
+	$('#overall_comment_button').on('click', function(){
+		createComment('overall_');
+	});
+	
+	$('#overall_comment_remove_button').on('click', function(){
+		removeComment('overall_');
+	});
+}
+
+function showInner(){
+	$('#outer').hide();
+	$('#inner').show();
+	state = 'middle';
+	console.log('Inner '+state);
+}
+
+function showOuter(new_state){
+	state = new_state;
+	
+	//handle what start of outer should say
+	if(state == 'start'){
+		if(problems != null){
+			$('#outer_start').html('<div class="column"><p>Initial survey questions.</p></div>');
+		} else {
+			$('#outer_start').html('<div class="column"><p>Please upload survey JSON file to get started.</p></div>');
+		}
+		$('#question_matrix_description').html('The following questions ask you to take on the perspective of different user types.');
+		$('#personal_questions').show();
+		$('#overall_comment_div').hide();
+		$('#control_span').html('Proceed to next part of survey: ');
+		$('#turn_button').html('Next');
+		$('#finish_div').hide();
+	} else if(state == 'end'){
+		$('#outer_start').html('<div class="column"><p>Exit survey questions. This is the last part of the survey. Please export your survey once complete.</p></div>');
+		$('#question_matrix_description').html('Considering your experience with this survey and identifying problems, please once again relect on the perspective of different user types.');
+		$('#personal_questions').hide();
+		$('#overall_comment_div').show();
+		$('#control_span').html('Go to previous part of survey: ');
+		$('#turn_button').html('Previous');
+		$('#finish_div').show();
+	}
+	populateOuter();
+	$('#outer_questions').show();
+	$('#inner').hide();
+	$('#outer').show();
+}
+
+function populateOuter(){
+	populateComment('overall_');
+	
 }
 
 function populateView(){
@@ -225,5 +314,5 @@ function populateSuggestionControls(){
 	populateCheckbox('want');
 	
 	populateRating()
-	populateComment();
+	populateComment('');
 }

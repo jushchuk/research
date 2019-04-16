@@ -26,52 +26,227 @@
 		</div>
 	</div> 
 	
-	<div id=viewer_controls class="row">
-		<div id=control_left class="column control"><button id="turn_left_button" type="button">Prev Problem (Left arrow key)</button></div>
-		<div id=control_center class="column control"></div>
-		<div id=control_right class="column control"><button id="turn_right_button" type="button">Next Problem (Right arrow key)</button></div>
-	</div> 
-	
-	<div id=viewer class="row">
-		<div id=page_problem class="column page">
-			<div id=page_problem_work class="row work">Work will go here</div>
-			<div id=page_problem_output class="row output">Output will go here</div>
+	<div id="outer">
+		<div id="outer_start">
+			<p>Please upload survey JSON file to get started.</p>
 		</div>
-		<div id=page_suggestion class="column page">Suggestion goes here</div>
-		<div id=page_controls class="column page">
-			<div id=suggestion_controls class="row">
-				<div id=suggestion_control_left class="column control"><button id="suggestion_turn_left_button" type="button">Prev Suggestion ([)</button></div>
-				<div id=suggestion_control_center class="column control"></div>
-				<div id=suggestion_control_right class="column control"><button id="suggestion_turn_right_button" type="button">Next Suggestion (])</button></div>
+		
+		<div id="outer_questions">
+			<div id='personal_questions'>
+				<div class="row">Which best describes you: 
+						<select id=role_select>
+							<option value="null" selected="selected">not selected</option>
+							<option value="instuctor">instuctor</option>
+							<option value="student">student</option>
+							<option value="industry">industry worker</option>
+						</select>
+				</div>
+				<div class="row">Which best describes your experience with Python: 
+						<select id=python_skill_select>
+							<option value="null" selected="selected">not selected</option>
+							<option value="1">no experience</option>
+							<option value="2">beginner</option>
+							<option value="3">somewhat experienced</option>
+							<option value="4">experienced</option>
+							<option value="5">very experienced</option>
+						</select>
+				</div>
+				<div class="row work">Which best describes your experience with SQL: 
+						<select id=sql_skill_select>
+							<option value="null" selected="selected">not selected</option>
+							<option value="1">no experience</option>
+							<option value="2">beginner</option>
+							<option value="3">somewhat experienced</option>
+							<option value="4">experienced</option>
+							<option value="5">very experienced</option>
+						</select>
+				</div>
 			</div>
-			<div id="recognize_select_div" class="row"><input type=checkbox id="recognize_checkbox">(A)ble to recognize the fix to this problem</input></div>
-			<div id="helpful_select_div" class="row"><input type=checkbox id="helpful_checkbox"></input>(S)uggestion was helpful in recognizing problem</div>
-			<div id="suggest_select_div" class="row"><input type=checkbox id="suggest_checkbox"></input>(Y)ou would suggest this as a fix to the problem</div>
-			<div id="want_select_div" class="row"><input type=checkbox id="want_checkbox"></input>(I)f you had this problem, you would have liked this as a fix to the problem</div>
-			<div id="rating_select_div" class="row">Rate the suggestion (1-5): 
-				<select id=rating_select>
-					<option value="null" selected="selected">no rating</option>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-				</select>
+			<div id='question_matrix_description' class='row'>
+				The following questions ask you to take on the perspective of different user types.
+			</div>
+			<div class='row'>
+				<div class="column">
+					Each row is user type.<br>Each column is suggestion type.
+				</div>
+				<div class="column">
+					Natural Language Suggestion
+				</div>
+				<div class="column">
+					Code fix in different problem context
+				</div>
+				<div class="column">
+					Code fix in same problem context
+				</div>
+			</div>
+			<div class="row">
+				<div class="column">
+					As an instructor, when you encounter a problem, how likely would you want a suggestion in the form of:
+				</div>
+				<div class="column">
+					<select id=instructor_nlp_preference_select>
+						<option value="null" selected="selected">not selected</option>
+						<option value="1">not likely</option>
+						<option value="2">somewhat likely</option>
+						<option value="3">very likely</option>
+					</select>
+				</div>
+				<div class="column">
+					<select id=instructor_diff_context_preference_select>
+						<option value="null" selected="selected">not selected</option>
+						<option value="1">not likely</option>
+						<option value="2">somewhat likely</option>
+						<option value="3">very likely</option>
+					</select>
+				</div>
+				<div class="column">
+					<select id=instructor_same_context_preference_select>
+						<option value="null" selected="selected">not selected</option>
+						<option value="1">not likely</option>
+						<option value="2">somewhat likely</option>
+						<option value="3">very likely</option>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="column">
+					As an student, when you encounter a problem, how likely would you want a suggestion in the form of:
+				</div>
+				<div class="column">
+					<select id=student_nlp_preference_select>
+						<option value="null" selected="selected">not selected</option>
+						<option value="1">not likely</option>
+						<option value="2">somewhat likely</option>
+						<option value="3">very likely</option>
+					</select>
+				</div>
+				<div class="column">
+					<select id=student_diff_context_preference_select>
+						<option value="null" selected="selected">not selected</option>
+						<option value="1">not likely</option>
+						<option value="2">somewhat likely</option>
+						<option value="3">very likely</option>
+					</select>
+				</div>
+				<div class="column">
+					<select id=student_same_context_preference_select>
+						<option value="null" selected="selected">not selected</option>
+						<option value="1">not likely</option>
+						<option value="2">somewhat likely</option>
+						<option value="3">very likely</option>
+					</select>
+				</div>
+			</div>
+			<div class="row work">
+				<div class="column">
+					As an industry worker, when you encounter a problem, how likely would you want a suggestion in the form of:
+				</div>
+				<div class="column">
+					<select id=industry_nlp_preference_select>
+						<option value="null" selected="selected">not selected</option>
+						<option value="1">not likely</option>
+						<option value="2">somewhat likely</option>
+						<option value="3">very likely</option>
+					</select>
+				</div>
+				<div class="column">
+					<select id=industry_diff_context_preference_select>
+						<option value="null" selected="selected">not selected</option>
+						<option value="1">not likely</option>
+						<option value="2">somewhat likely</option>
+						<option value="3">very likely</option>
+					</select>
+				</div>
+				<div class="column">
+					<select id=industry_same_context_preference_select>
+						<option value="null" selected="selected">not selected</option>
+						<option value="1">not likely</option>
+						<option value="2">somewhat likely</option>
+						<option value="3">very likely</option>
+					</select>
+				</div>
+			</div>
+			<div id="overall_comment_div">
+				<div class="row">
+					<p>
+						Here is an (optional) place to write any comments you have. How effective were the suggestions? Are there any other types of suggestions you would benefit from?
+					</p>
+				</div>
+				<div class="row">
+					<p id=overall_comment>
+					
+					</p>
+				</div>
+				<div class="row">
+					<textarea id=overall_comment_input placeholder="Write comments here."></textarea>
+					<div>
+						<button id="overall_comment_button" type="button">Add comment</button>
+						<button id="overall_comment_remove_button" type="button">Remove comment</button>
+					</div>
+				</div>
 			</div>
 			
 			<div class="row">
-				<p id=comment>
-				
-				</p>
+				<span id="control_span">Proceed to next part of survey: </span><div id=control class="column control"><button id="turn_button" type="button">Next</button></div>
 			</div>
-			<div class="row">
-				<textarea id=comment_input placeholder="Write any comments/suggestions here"></textarea>
-				<div>
-					<button id="comment_button" type="button">Add comment</button>
-					<button id="comment_remove_button" type="button">Remove comment</button>
+			
+			<div id="finish_div" class="row">
+				YOU MUST CLICK EXPORT AT THE TOP IF YOU ARE DONE TO SAVE SURVEY.
+			</div>
+			
+		</div>
+	</div>
+	
+	<div id="inner">
+	
+		<div id=viewer_controls class="row">
+			<div id=control_left class="column control"><button id="turn_left_button" type="button">Prev Problem (Left arrow key)</button></div>
+			<div id=control_center class="column control"></div>
+			<div id=control_right class="column control"><button id="turn_right_button" type="button">Next Problem (Right arrow key)</button></div>
+		</div> 
+		
+		<div id=viewer class="row">
+			<div id=page_problem class="column page">
+				<div id=page_problem_work class="row work">Work will go here</div>
+				<div id=page_problem_output class="row output">Output will go here</div>
+			</div>
+			<div id=page_suggestion class="column page">Suggestion goes here</div>
+			<div id=page_controls class="column page">
+				<div id=suggestion_controls class="row">
+					<div id=suggestion_control_left class="column control"><button id="suggestion_turn_left_button" type="button">Prev Suggestion ([)</button></div>
+					<div id=suggestion_control_center class="column control"></div>
+					<div id=suggestion_control_right class="column control"><button id="suggestion_turn_right_button" type="button">Next Suggestion (])</button></div>
+				</div>
+				<div id="recognize_select_div" class="row"><input type=checkbox id="recognize_checkbox">(A)ble to recognize the fix to this problem</input></div>
+				<div id="helpful_select_div" class="row"><input type=checkbox id="helpful_checkbox"></input>(S)uggestion was helpful in recognizing problem</div>
+				<div id="suggest_select_div" class="row"><input type=checkbox id="suggest_checkbox"></input>(Y)ou would suggest this as a fix to the problem</div>
+				<div id="want_select_div" class="row"><input type=checkbox id="want_checkbox"></input>(I)f you had this problem, you would have liked this as a fix to the problem</div>
+				<div id="rating_select_div" class="row">Rate the suggestion (1-5): 
+					<select id=rating_select>
+						<option value="null" selected="selected">no rating</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+				</div>
+				
+				<div class="row">
+					<p id=comment>
+					
+					</p>
+				</div>
+				<div class="row">
+					<textarea id=comment_input placeholder="Write any comments/suggestions here"></textarea>
+					<div>
+						<button id="comment_button" type="button">Add comment</button>
+						<button id="comment_remove_button" type="button">Remove comment</button>
+					</div>
 				</div>
 			</div>
 		</div>
+		
 	</div>
 </body>
 </html>

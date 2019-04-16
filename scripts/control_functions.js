@@ -49,10 +49,14 @@ function turn(direction, type){
 		if(direction == 'left'){
 			if(current > 0){
 				updatePosition(current-1, type)
+			} else if(current == 0 && type=='problem'){
+				showOuter('start');
 			}
 		} else if(direction == 'right'){
 			if(current < max){
 				updatePosition(current+1, type)
+			} else if(current == max && type=='problem'){
+				showOuter('end');
 			}
 			
 		}
@@ -129,43 +133,57 @@ function updateRating(rating){
 }
 
 //Suggestion Comment Control Functions
-function populateComment(){
-	$('#comment').html('');
+function populateComment(comment_name){
+	$('#'+comment_name+'comment').html('');
 	if (problems != null){
-		var comment = problems['problems'][currentProblem]['suggestions'][currentSuggestion]['feedback']['comment'];
+		var comment;
+		if(comment_name == ''){
+			comment = problems['problems'][currentProblem]['suggestions'][currentSuggestion]['feedback']['comment'];
+		} else {
+			comment = problems['survey']['end']['comment'];
+		}
 		
 		//populate the comment
 		if (comment == null || comment.length == 0){
-			$('#comment').text('No comment');
+			$('#'+comment_name+'comment').text('No comment');
 		} else {
-			$('#comment').text(comment);
+			$('#'+comment_name+'comment').text(comment);
 		}
 	}
 	
 }
 
-function createComment(){
-	var comment = $.trim($('#comment_input').val());
+function createComment(comment_name){
+	var comment = $.trim($('#'+comment_name+'comment_input').val());
 	if (comment != ''){
 		if (problems != null){
-			for(var i=0; i<3; i++){
-				var feedback = problems['problems'][currentProblem]['suggestions'][i]['feedback'];
-				feedback['comment'] = comment;
+			if(comment_name == ''){
+				
+				for(var i=0; i<3; i++){
+					var feedback = problems['problems'][currentProblem]['suggestions'][i]['feedback'];
+					feedback['comment'] = comment;
+				}
+				//console.log(feedback['comment']);
+			} else {
+				problems['survey']['end']['comment'] = comment;
 			}
-			//console.log(feedback['comment']);
-			populateComment();
+			populateComment(comment_name);
 		}
 	}
-	$('#comment_input').val('');
+	$('#'+comment_name+'comment_input').val('');
 }
 
-function removeComment(){
+function removeComment(comment_name){
 	if (problems != null){
-		for(var i=0; i<3; i++){
-			var feedback = problems['problems'][currentProblem]['suggestions'][i]['feedback'];
-			feedback['comment'] = null;
+		if(comment_name == ''){
+			for(var i=0; i<3; i++){
+				var feedback = problems['problems'][currentProblem]['suggestions'][i]['feedback'];
+				feedback['comment'] = null;
+			}
+			//console.log(feedback['comment']);
+		} else {
+			problems['survey']['end']['comment'] = null;
 		}
-		//console.log(feedback['comment']);
-		populateComment();
+		populateComment(comment_name);
 	}
 }
