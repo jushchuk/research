@@ -35,6 +35,10 @@ function setup(){
 				}
 				break;
 				
+				case 68: // d
+				toggleCheckbox("encounter",true);
+				break;
+				
 				case 65: // a
 				toggleCheckbox("recognize",true);
 				break;
@@ -131,9 +135,49 @@ function initilizeSurveyObject(){
 	if(problems != null){
 		if(problems['survey']==null){
 			problems['survey'] = {
-				'start': null,
+				'start': {
+					'personal': {
+						'role':null,
+						'python':null,
+						'sql':null
+					},
+					'preference': {
+						'instructor': {
+							'nlp': null,
+							'diff_context': null,
+							'same_context': null
+						},
+						'student': {
+							'nlp': null,
+							'diff_context': null,
+							'same_context': null
+						},
+						'industry': {
+							'nlp': null,
+							'diff_context': null,
+							'same_context': null
+						}
+					}
+				},
 				'end': {
-					'comment': null
+					'comment': null,
+					'preference': {
+						'instructor': {
+							'nlp': null,
+							'diff_context': null,
+							'same_context': null
+						},
+						'student': {
+							'nlp': null,
+							'diff_context': null,
+							'same_context': null
+						},
+						'industry': {
+							'nlp': null,
+							'diff_context': null,
+							'same_context': null
+						}
+					}
 				}
 			};
 		}
@@ -151,8 +195,63 @@ function initilizeControls(){
 		showInner();
 	});
 	
+	//outer survey personal questions
+	$('#role_select').on('change', function(){
+		updateDropdownQuestion('role_select','personal', 'role', null, $(this).val());
+	});
+	
+	$('#python_skill_select').on('change', function(){
+		updateDropdownQuestion('python_skill_select','personal', 'python', null, $(this).val());
+	});
+	
+	$('#sql_skill_select').on('change', function(){
+		updateDropdownQuestion('sql_skill_select','personal', 'sql', null, $(this).val());
+	});
 	
 	
+	//preference questions
+	
+	//var types = ['instructor','student','industry'];
+	//var subtypes = ['nlp','diff_context','same_context'];
+		
+		//nlp
+	$('#instructor_nlp_preference_select').on('change', function(){
+		updateDropdownQuestion('instructor_nlp_preference_select','preference', 'instructor', 'nlp', $(this).val());
+	});
+	
+	$('#student_nlp_preference_select').on('change', function(){
+		updateDropdownQuestion('student_nlp_preference_select','preference', 'student', 'nlp', $(this).val());
+	});
+	
+	$('#industry_nlp_preference_select').on('change', function(){
+		updateDropdownQuestion('industry_nlp_preference_select','preference', 'industry', 'nlp', $(this).val());
+	});
+	
+		//diff_context
+	$('#instructor_diff_context_preference_select').on('change', function(){
+		updateDropdownQuestion('instructor_diff_context_preference_select','preference', 'instructor', 'diff_context', $(this).val());
+	});
+	
+	$('#student_diff_context_preference_select').on('change', function(){
+		updateDropdownQuestion('student_diff_context_preference_select','preference', 'student', 'diff_context', $(this).val());
+	});
+	
+	$('#industry_diff_context_preference_select').on('change', function(){
+		updateDropdownQuestion('industry_diff_context_preference_select','preference', 'industry', 'diff_context', $(this).val());
+	});
+	
+		//same_context
+	$('#instructor_same_context_preference_select').on('change', function(){
+		updateDropdownQuestion('instructor_same_context_preference_select','preference', 'instructor', 'same_context', $(this).val());
+	});
+	
+	$('#student_same_context_preference_select').on('change', function(){
+		updateDropdownQuestion('student_same_context_preference_select','preference', 'student', 'same_context', $(this).val());
+	});
+	
+	$('#industry_same_context_preference_select').on('change', function(){
+		updateDropdownQuestion('industry_same_context_preference_select','preference', 'industry', 'same_context', $(this).val());
+	});
 	
 	//Problem navigation controls
 	$('#turn_left_button').on('click', function(){
@@ -179,6 +278,10 @@ function initilizeControls(){
 	
 	
 	//Suggestion checkbox controls
+	$('#encounter_checkbox').on('click', function(){
+		toggleCheckbox('encounter',false);
+	});
+	
 	$('#recognize_checkbox').on('click', function(){
 		toggleCheckbox('recognize',false);
 	});
@@ -228,8 +331,9 @@ function showInner(){
 }
 
 function showOuter(new_state){
+	console.log(new_state);
 	state = new_state;
-	
+	console.log(state);
 	//handle what start of outer should say
 	if(state == 'start'){
 		if(problems != null){
@@ -259,6 +363,28 @@ function showOuter(new_state){
 }
 
 function populateOuter(){
+	
+	//personal questions
+	populateDropdownQuestion('role_select','personal', 'role', null);
+	populateDropdownQuestion('python_skill_select','personal', 'python', null);
+	populateDropdownQuestion('sql_skill_select','personal', 'sql', null);
+	
+	//preference questions
+	var types = ['instructor','student','industry'];
+	var subtypes = ['nlp','diff_context','same_context'];
+	populateDropdownQuestion('instructor_nlp_preference_select','preference', 'instructor', 'nlp');
+	populateDropdownQuestion('student_nlp_preference_select','preference', 'student', 'nlp');
+	populateDropdownQuestion('industry_nlp_preference_select','preference', 'industry', 'nlp');
+	
+	populateDropdownQuestion('instructor_diff_context_preference_select','preference', 'instructor', 'diff_context');
+	populateDropdownQuestion('student_diff_context_preference_select','preference', 'student', 'diff_context');
+	populateDropdownQuestion('industry_diff_context_preference_select','preference', 'industry', 'diff_context');
+	
+	populateDropdownQuestion('instructor_same_context_preference_select','preference', 'instructor', 'same_context');
+	populateDropdownQuestion('student_same_context_preference_select','preference', 'student', 'same_context');
+	populateDropdownQuestion('industry_same_context_preference_select','preference', 'industry', 'same_context');
+	
+	
 	populateComment('overall_');
 	
 }
@@ -308,6 +434,7 @@ function populateSuggestion(){
 function populateSuggestionControls(){
 	$('#suggestion_control_center').text('Current Suggestion: ' + (currentSuggestion + 1));
 	
+	populateCheckbox('encounter');
 	populateCheckbox('recognize');
 	populateCheckbox('helpful'); 
 	populateCheckbox('suggest');

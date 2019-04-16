@@ -79,7 +79,7 @@ function updatePosition(position, type){
 //Suggestion Checkboxes Control Functions
 //need to verify
 function toggleCheckbox(type, toggle){
-	var valid_types = ["recognize","helpful","suggest",,"want"];
+	var valid_types = ["encounter","recognize","helpful","suggest",,"want"];
 	if(problems != null && valid_types.indexOf(type) != -1){
 		//console.log(currentProblem+"."+currentSuggestion+': '+$('#'+type+'_checkbox').prop('checked'));
 		var value = $('#'+type+'_checkbox').prop('checked');
@@ -88,7 +88,7 @@ function toggleCheckbox(type, toggle){
 			$('#'+type+'_checkbox').prop('checked',value);
 		}
 		problems['problems'][currentProblem]['suggestions'][currentSuggestion]['feedback'][type] = value;
-		if(type == "recognize"){
+		if(type == "recognize" || type == "encounter"){
 			for(var i=0; i<3; i++){
 				problems['problems'][currentProblem]['suggestions'][i]['feedback'][type] = value;
 			}
@@ -99,7 +99,7 @@ function toggleCheckbox(type, toggle){
 }
 
 function populateCheckbox(type){
-	var valid_types = ["recognize","helpful","suggest","want"];
+	var valid_types = ["encounter","recognize","helpful","suggest","want"];
 	
 	if(problems != null && valid_types.indexOf(type) != -1){
 		$('#'+type+'_checkbox').prop('checked', false);
@@ -111,7 +111,45 @@ function populateCheckbox(type){
 	
 }
 
+//prepost dropdown questions
+function populateDropdownQuestion(id, category, type, subtype){
+	var validValues = ["null","1","2","3","4","5","instuctor","student","industry"]
+	if (problems != null){
+		var new_value = null;
+		if(category == 'personal' && state == 'start'){
+			var temp = problems['survey'][state][category][type];
+			if(temp == null || validValues.indexOf(temp)==-1){
+				temp = "null";
+			}
+			new_value = temp;
+		} else if(category == 'preference'){
+			var temp = problems['survey'][state][category][type][subtype];
+			if(temp == null || validValues.indexOf(temp)==-1){
+				temp = "null";
+			}
+			new_value = temp;
+		}
+		if(new_value != null){
+			$('#'+id).val(new_value);
+		}
+	}	
+}
 
+function updateDropdownQuestion(id, category, type, subtype, value){
+	if (problems != null){
+		
+		console.log(state,category,value);
+		if(category == 'personal' && state == 'start'){
+			problems['survey'][state][category][type] = value;
+			console.log("HEE"+problems['survey'][state][category][type]);
+		} else if(category == 'preference'){
+			problems['survey'][state][category][type][subtype] = value;
+			console.log("HO"+problems['survey'][state][category][type][subtype]);
+		}
+		
+		populateRating(id, category, type, subtype);
+	}
+}
 
 //Suggestion Rating Control Functions
 function populateRating(){
@@ -187,3 +225,4 @@ function removeComment(comment_name){
 		populateComment(comment_name);
 	}
 }
+
