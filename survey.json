@@ -131,7 +131,7 @@
           "level": 2,
           "suggestion": [
             "        final_result = [{\"id\":makeURL('students',sid),\"lastName\":lname,\"firstName\":fname,\"classes\":class_list} for sid, lname, fname in student_result][0]",
-            "        final_result = [{\"id\":makeURL('students',sid),\"lastName\":lname,\"classes\":class_list} for sid,  name 'lname' is not definedin student_result][0]"
+            "        final_result = [{\"id\":makeURL('students',sid),\"lastName\":lname,\"classes\":class_list} for sid, name in student_result][0]"
           ],
           "feedback": {
             "rating": 0,
