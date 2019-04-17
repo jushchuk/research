@@ -1,6 +1,7 @@
 var problems = null;
 var currentProblem = 0;
 var currentSuggestion = 0;
+var currentFilename = 'survey_results.json';
 var state = 'start';
 
 var startTime = null;
@@ -12,7 +13,7 @@ $(document).ready(function(){
 function setup(){
 	
 	//once user uploads file, much of the site becomes operational (see parseLogs method)
-	document.getElementById("file_upload").addEventListener("change", parseProblems, false);
+	//document.getElementById("file_upload").addEventListener("change", parseProblemsManually, false);
 	
 	//adding simple key shortcuts to common operations
 	$(document).keydown(function(e) {
@@ -98,10 +99,50 @@ function setup(){
 	
 	//used for stylizing code
 	hljs.initHighlightingOnLoad();
+	
+	//comment this out and uncomment other parts to do manually
+	parseProblems();
 }
 
 
 function parseProblems(){
+	$.getJSON( "https://raw.githubusercontent.com/jushchuk/research/master/survey.json", function(data) {
+		console.log( data );
+		if(data != null){
+			startTime = Date.now()
+			problems = data;
+
+			console.log(problems);
+				
+			initilizeSurveyObject();
+				
+			initilizeControls();
+				
+			currentProblem = 0;
+			currentSuggestion = 0;
+				
+			populateView();
+				
+			showOuter('start');
+
+		
+		} else {
+			console.log('failed to parse file:');
+			console.log(data);
+		}
+		
+	}).done(function() {
+	   console.log( "second success" );
+	})
+	.fail(function() {
+	  console.log( "error" );
+	})
+	.always(function() {
+	   console.log( "complete" );
+	});
+}
+
+function parseProblemsManually(){
 	var file = this.files;
 	if(file != null && file.length > 0){
 		file = file[0];
@@ -339,7 +380,7 @@ function showOuter(new_state){
 		if(problems != null){
 			$('#outer_start').html('<div class="column"><p>Initial survey questions.</p></div>');
 		} else {
-			$('#outer_start').html('<div class="column"><p>Please upload survey JSON file to get started.</p></div>');
+			$('#outer_start').html('<div class="column"><p>There was an error, please attempt to export and then refresh.</p></div>');
 		}
 		$('#question_matrix_description').html('<span>The following questions ask you to take on the perspective of different user types. <strong>Fill out all rows, even if you do not fit that user type. In that case, consider what you would like if you were that user type.</strong></span>');
 		$('#personal_questions').show();
@@ -348,8 +389,8 @@ function showOuter(new_state){
 		$('#turn_button').html('Next');
 		$('#finish_div').hide();
 	} else if(state == 'end'){
-		$('#outer_start').html('<div class="column"><p>Exit survey questions. This is the last part of the survey. <strong>Please export your survey once complete.</strong></p></div>');
-		$('#question_matrix_description').html('<span>Considering your experience with this survey and identifying problems, please once again relect on the perspective of different user types. <strong>Once again, fill out each row considering what you would like if you were that user type.</strong></span>');
+		$('#outer_start').html('<div class="column"><p>Exit survey questions. This is the last part of the survey. <strong>Please export your survey once complete. Then send to me (James) via communication method I reached out to you from.</strong></p></div>');
+		$('#question_matrix_description').html('<span>Considering your experience with this survey and identifying problems. <strong>Once again, fill out each row considering what you would like if you were that user type.</strong></span>');
 		$('#personal_questions').hide();
 		$('#overall_comment_div').show();
 		$('#control_span').html('Go to previous part of survey: ');

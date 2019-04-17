@@ -4,7 +4,7 @@ function exportFile(){
 	if (problems != null){
 		var new_filename = null;
 		if ($('#file_export_name').val() == ''){
-			new_filename = current_filename;
+			new_filename = currentFilename;
 		} else {
 			new_filename = $('#file_export_name').val();
 		}
